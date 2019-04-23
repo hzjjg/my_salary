@@ -1,6 +1,7 @@
 {
 	"name": "mysalary",
 	"displayName": "MySalary",
+	"publisher": "hzjjg",
 	"description": "show your salary",
 	"version": "0.0.1",
 	"engines": {
@@ -15,6 +16,7 @@
 		"onCommand:extension.doRefactor"
 	],
 	"main": "./dist/main.js",
+	"repository": "https://github.com/hzjjg/my_salary",
 	"contributes": {
 		"commands": [
 			{
