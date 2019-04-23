@@ -1,26 +1,30 @@
-class settingsPage {
+/** window */
+declare const acquireVsCodeApi: any;
+
+class SettingsPage {
+
+    private vscode: any;
+
+    private oldState: any;
+
+    private options: Options;
 
     constructor() {
         this.vscode = acquireVsCodeApi();
         this.oldState = this.vscode.getState();
-
         this.options = {
             updateInterval: 100,
             dailySalary: 600,
             unit: '元',
             startWorkingTime: '9:30',
             endWorkingTime: '18:30',
-        }
+        };
 
         this.init();
     }
 
-    setOptions(options) {
-        this.options.updateInterval = options.updateInterval;
-        this.options.dailySalary = options.dailySalary;
-        this.options.unit = options.unit;
-        this.options.startWorkingTime = options.startWorkingTime;
-        this.options.endWorkingTime = options.endWorkingTime;
+    setOptions(options: Options) {
+        Object.assign(this.options, options);
     }
 
     initMessageListener() {
@@ -34,18 +38,18 @@ class settingsPage {
     bindDom() {
         for (const key in this.options) {
             if (this.options.hasOwnProperty(key)) {
-                const dom = document.getElementById(key);
+                const dom = document.getElementById(key) as HTMLElement;
                 dom.onchange = (event) => {
                     console.log(event);
-                    this.options[key] = event.target.value;
+                    (<any>this.options)[key] = (<any>event.target).value;
                     this.save();
-                }
+                };
 
                 Reflect.defineProperty(this.options, key, {
                     set(v) {
-                        dom.value = v;
+                        (<HTMLInputElement>dom).value = v;
                     }
-                })
+                });
             }
         }
     }
@@ -63,4 +67,12 @@ class settingsPage {
     }
 }
 
-new settingsPage();
+interface Options {
+    updateInterval: number;
+    dailySalary: number;
+    unit: string;
+    startWorkingTime: string;
+    endWorkingTime: string;
+}
+
+new SettingsPage();

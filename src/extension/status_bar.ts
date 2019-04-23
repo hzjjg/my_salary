@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import options from './config';
 
+/**
+ * 状态栏
+ */
 export class StatusBar {
 
     /** 底部barItem对象 */

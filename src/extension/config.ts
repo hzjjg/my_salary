@@ -3,7 +3,7 @@ const options = {
     dailySalary: 600,
     unit: '元',
     startWorkingTime:'9:30',
-    endWorkingTime:'23:59',
+    endWorkingTime:'18:30',
 };
 
 export default options;

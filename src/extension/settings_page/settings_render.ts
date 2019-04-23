@@ -1,11 +1,12 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { getNonce } from "./script/utils";
 
 export default (extensionPath: string) => {
 
     const scriptPathOnDisk = vscode.Uri.file(path.join(
         extensionPath,
-        'src/extension/settings_page',
+        'dist/extension/settings_page',
         'index.js'));
     const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
 
@@ -68,14 +69,3 @@ export default (extensionPath: string) => {
     <script nonce="${nonce}" src="${scriptUri}"></script>
     </html>`;
 };
-
-
-function getNonce() {
-    let text = "";
-    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (let i = 0; i < 32; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-
-}
