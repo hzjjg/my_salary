@@ -17,6 +17,7 @@
 	],
 	"main": "./dist/main.js",
 	"repository": "https://github.com/hzjjg/my_salary",
+	"icon": "https://raw.githubusercontent.com/hzjjg/my_salary/master/icon.png",
 	"contributes": {
 		"commands": [
 			{
