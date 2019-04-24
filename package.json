@@ -11,7 +11,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld",
+		"onCommand:extension.showMySalary",
 		"onCommand:extension.openSettings",
 		"onCommand:extension.doRefactor"
 	],
@@ -21,8 +21,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "MySalary: Hello World"
+				"command": "extension.showMySalary",
+				"title": "MySalary: Show My Salary"
 			},
 			{
 				"command": "extension.openSettings",

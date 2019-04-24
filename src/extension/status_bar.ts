@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import options from './config';
+import options from './default_config';
 
 /**
  * 状态栏
@@ -36,8 +36,8 @@ export class StatusBar {
     }
 
     private registerCommand() {
-        let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-            vscode.window.showInformationMessage('hzjjg!');
+        let disposable = vscode.commands.registerCommand('extension.showMySalary', () => {
+            vscode.window.showInformationMessage('已显示你的工资!');
         });
 
         this.context.subscriptions.push(disposable);

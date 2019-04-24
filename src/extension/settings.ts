@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import Render from './settings_page/settings_render';
-import options from './config';
+import options from './default_config';
 
 export class Settings {
 
     constructor(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.commands.registerCommand('extension.openSettings', () => {
-            SettingsPanel.createOrShow(context.extensionPath);
+            SettingsPanel.createOrShow(context);
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('extension.doRefactor', () => {
@@ -33,10 +33,11 @@ class SettingsPanel {
     public static readonly viewType = 'settings';
 
     private readonly panel: vscode.WebviewPanel;
+    private readonly context: vscode.ExtensionContext;
     private readonly extensionPath: string;
     private disposables: vscode.Disposable[] = [];
 
-    public static createOrShow(extensionPath: string) {
+    public static createOrShow(context: vscode.ExtensionContext) {
         const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
 
         if (this.currentPanel) {
@@ -46,29 +47,35 @@ class SettingsPanel {
         const panel = vscode.window.createWebviewPanel(this.viewType, 'settings', column || vscode.ViewColumn.One, {
             enableScripts: true,
             localResourceRoots: [
-                vscode.Uri.file(extensionPath)
+                vscode.Uri.file(context.extensionPath)
             ],
         });
 
-        this.currentPanel = new SettingsPanel(panel, extensionPath);
+        this.currentPanel = new SettingsPanel(panel, context);
     }
 
     public static revive(panel: vscode.WebviewPanel, extensionPath: string) {
 
     }
 
-    private constructor(panel: vscode.WebviewPanel, extensionPath: string) {
+    private constructor(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
         this.panel = panel;
-        this.extensionPath = extensionPath;
+        this.context = context;
+        this.extensionPath = context.extensionPath;
 
         this.update();
 
         this.panel.onDidDispose(() => this.dispose(), null, this.disposables);
 
         this.panel.webview.onDidReceiveMessage(message => {
-            switch (message.commend) {
-                case 'alert':
-                    vscode.window.showErrorMessage(message.text);
+            //TODO 事件监听分离
+            console.log('jiba');
+
+            switch (message.command) {
+                case 'changeOptions':
+                    console.log(message, message.data);
+                    this.context.globalState.update('options', message.data);
+                    console.log(this.context.globalState.get('options'));
                     return;
             }
         }, null, this.disposables);

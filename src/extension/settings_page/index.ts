@@ -40,8 +40,9 @@ class SettingsPage {
             if (this.options.hasOwnProperty(key)) {
                 const dom = document.getElementById(key) as HTMLElement;
                 dom.onchange = (event) => {
-                    console.log(event);
                     (<any>this.options)[key] = (<any>event.target).value;
+                    console.log((<any>event.target).value,JSON.stringify(this.options));
+                    
                     this.save();
                 };
 
@@ -55,10 +56,13 @@ class SettingsPage {
     }
 
     save() {
+        console.log(this.options.dailySalary);
+        
         this.vscode.postMessage({
-            command: 'options',
-            data: this.options
+            command: 'changeOptions',
+            data: JSON.stringify(this.options)
         });
+        this.vscode.setState(this.options);
     }
 
     init() {
