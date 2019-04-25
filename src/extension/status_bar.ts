@@ -1,5 +1,12 @@
 import * as vscode from 'vscode';
-import options from './default_config';
+
+const defaultOptions: Options = {
+    updateInterval: 100,
+    dailySalary: 600,
+    unit: '元',
+    startWorkingTime: '9:30',
+    endWorkingTime: '18:30',
+};
 
 /**
  * 状态栏
@@ -9,30 +16,50 @@ export class StatusBar {
     /** 底部barItem对象 */
     private text: vscode.StatusBarItem;
     /** 一天的上班的总毫秒数 */
-    private dayTime: number;
+    private dayTime: number = 0;
     /** 今天日期的字符串 2019-3-16 */
-    private todayDateString: string;
+    private todayDateString: string = 'null';
     /** 开始上班的时间戳 */
-    private startWorkingTime: number;
+    private startWorkingTime: number = 0;
     /** 结束上班的时间戳 */
-    private endWorkingTime: number;
+    private endWorkingTime: number = 0;
+
+    private options: Options;
 
     private context: vscode.ExtensionContext;
 
     constructor(context: vscode.ExtensionContext) {
+        const statedOptions = context.globalState.get('options') as Options;
+        const options = Object.assign(defaultOptions, statedOptions || {});
+        console.log(options);
+
         this.context = context;
         this.registerCommand();
+        this.options = options;
 
         this.text = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        this.todayDateString = this.getTodayDateString();
-        this.startWorkingTime = this.getTime(options.startWorkingTime);
-        this.endWorkingTime = this.getTime(options.endWorkingTime);
-        this.dayTime = this.getDayTime();
-
         const subscriptions = context.subscriptions;
         subscriptions.push(this.text);
+        this.initData();
 
         this.start();
+    }
+
+    /** 根据配置设置初始化的数据 */
+    private initData() {
+        this.todayDateString = this.getTodayDateString();
+        this.startWorkingTime = this.getTime(this.options.startWorkingTime);
+        this.endWorkingTime = this.getTime(this.options.endWorkingTime);
+        this.dayTime = this.getDayTime();
+    }
+
+    /**
+     * 重新设置配置
+     * @param options 配置
+     */
+    public setOptions(options: Options) {
+        this.options = options;
+        this.initData();
     }
 
     private registerCommand() {
@@ -71,10 +98,10 @@ export class StatusBar {
      */
     private getNowSalary() {
         const now = Date.now();
-        const dailySalary = options.dailySalary;
+        const dailySalary = this.options.dailySalary;
 
         if (now < this.startWorkingTime) return 0;
-        if (now > this.endWorkingTime) return options.dailySalary;
+        if (now > this.endWorkingTime) return this.options.dailySalary;
 
         const passedTime = now - this.startWorkingTime;
         const salary = passedTime / this.dayTime * dailySalary;
@@ -88,7 +115,7 @@ export class StatusBar {
      */
     private updateText() {
         const salary = this.getNowSalary();
-        this.text.text = `${salary}${options.unit}`;
+        this.text.text = `${salary}${this.options.unit}`;
 
         this.text.show();
     }
@@ -99,7 +126,7 @@ export class StatusBar {
     private start() {
         setInterval(() => {
             this.updateText();
-        }, options.updateInterval);
+        }, this.options.updateInterval);
     }
 
 }

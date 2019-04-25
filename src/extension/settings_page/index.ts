@@ -1,5 +1,15 @@
-/** window */
+/**
+ * 设置页面webview 的script
+ */
 declare const acquireVsCodeApi: any;
+
+const defaultOptions: Options = {
+    updateInterval: 100,
+    dailySalary: 600,
+    unit: '元',
+    startWorkingTime: '9:30',
+    endWorkingTime: '18:30',
+};
 
 class SettingsPage {
 
@@ -12,71 +22,77 @@ class SettingsPage {
     constructor() {
         this.vscode = acquireVsCodeApi();
         this.oldState = this.vscode.getState();
-        this.options = {
-            updateInterval: 100,
-            dailySalary: 600,
-            unit: '元',
-            startWorkingTime: '9:30',
-            endWorkingTime: '18:30',
-        };
+        console.log('oldState');
+        console.log(this.oldState);
+
+        this.options = defaultOptions;
 
         this.init();
     }
 
     setOptions(options: Options) {
-        Object.assign(this.options, options);
+        this.options = Object.assign(this.options, options);
     }
 
     initMessageListener() {
-        window.addEventListener('message', event => {
-            const message = event.data;
-            console.log(message);
-            this.setOptions(message);
+        window.addEventListener('message', message => {
+            const { type, data } = message;
+            console.log('webview receive message');
+            console.log(data);
+
+            //TODO 写事件处理器
+            switch (type) {
+                case 'options':
+                    this.setOptions(data);
+                    this.setFormValue(this.options);
+                    break;
+                default:
+                    break;
+            }
         });
     }
 
     bindDom() {
         for (const key in this.options) {
             if (this.options.hasOwnProperty(key)) {
-                const dom = document.getElementById(key) as HTMLElement;
-                dom.onchange = (event) => {
-                    (<any>this.options)[key] = (<any>event.target).value;
-                    console.log((<any>event.target).value,JSON.stringify(this.options));
-                    
+                const formItem = this.getFormItem(key);
+
+                formItem.onchange = (event) => {
+                    const target = event.target as HTMLInputElement;
+                    (<any>this.options)[key] = target.value;
                     this.save();
                 };
+            }
+        }
+    }
 
-                Reflect.defineProperty(this.options, key, {
-                    set(v) {
-                        (<HTMLInputElement>dom).value = v;
-                    }
-                });
+    getFormItem(formId: string) {
+        return document.getElementById(formId) as HTMLInputElement;
+    }
+
+    setFormValue(options: Options) {
+        for (const key in options) {
+            if (options.hasOwnProperty(key)) {
+                const element = (options as any)[key];
+                const formItem = this.getFormItem(key);
+                formItem.value = element;
             }
         }
     }
 
     save() {
-        console.log(this.options.dailySalary);
-        
         this.vscode.postMessage({
-            command: 'changeOptions',
-            data: JSON.stringify(this.options)
+            type: 'changeOptions',
+            data: Object.assign({}, this.options)
         });
-        this.vscode.setState(this.options);
+        // this.vscode.setState(this.options);
     }
 
     init() {
+        this.setFormValue(this.options);
         this.bindDom();
         this.initMessageListener();
     }
-}
-
-interface Options {
-    updateInterval: number;
-    dailySalary: number;
-    unit: string;
-    startWorkingTime: string;
-    endWorkingTime: string;
 }
 
 new SettingsPage();

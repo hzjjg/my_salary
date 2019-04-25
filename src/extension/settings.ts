@@ -69,11 +69,8 @@ class SettingsPanel {
 
         this.panel.webview.onDidReceiveMessage(message => {
             //TODO 事件监听分离
-            console.log('jiba');
-
-            switch (message.command) {
+            switch (message.type) {
                 case 'changeOptions':
-                    console.log(message, message.data);
                     this.context.globalState.update('options', message.data);
                     console.log(this.context.globalState.get('options'));
                     return;
@@ -98,7 +95,6 @@ class SettingsPanel {
     private async update() {
         this.panel.title = 'settings';
         this.panel.webview.html = this.getHtmlForWebview();
-        this.panel.webview.postMessage(options);
     }
 
     private getHtmlForWebview() {
