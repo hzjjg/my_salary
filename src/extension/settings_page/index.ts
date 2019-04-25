@@ -15,17 +15,18 @@ class SettingsPage {
 
     private vscode: any;
 
-    private oldState: any;
+    private oldOptions: any;
 
     private options: Options;
 
     constructor() {
         this.vscode = acquireVsCodeApi();
-        this.oldState = this.vscode.getState();
+        // this.vscode.setState(defaultOptions);
+        this.oldOptions = this.vscode.getState();
         console.log('oldState');
-        console.log(this.oldState);
+        console.log(this.oldOptions);
 
-        this.options = defaultOptions;
+        this.options = this.oldOptions || defaultOptions;
 
         this.init();
     }
@@ -36,9 +37,8 @@ class SettingsPage {
 
     initMessageListener() {
         window.addEventListener('message', message => {
-            const { type, data } = message;
+            const { type, data } = message.data;
             console.log('webview receive message');
-            console.log(data);
 
             //TODO 写事件处理器
             switch (type) {
@@ -60,7 +60,8 @@ class SettingsPage {
                 formItem.onchange = (event) => {
                     const target = event.target as HTMLInputElement;
                     (<any>this.options)[key] = target.value;
-                    this.save();
+                    this.saveState();
+                    this.emitOptionChange();
                 };
             }
         }
@@ -80,12 +81,15 @@ class SettingsPage {
         }
     }
 
-    save() {
+    saveState() {
+        this.vscode.setState(this.options);
+    }
+
+    emitOptionChange() {
         this.vscode.postMessage({
             type: 'changeOptions',
             data: Object.assign({}, this.options)
         });
-        // this.vscode.setState(this.options);
     }
 
     init() {

@@ -5,7 +5,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log('Congratulations, your extension "mysalary" is now active!');
 
-	new StatusBar(context);
+	StatusBar.getInstnce(context);
 	new Settings(context);
 }
 

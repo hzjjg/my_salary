@@ -28,7 +28,18 @@ export class StatusBar {
 
     private context: vscode.ExtensionContext;
 
-    constructor(context: vscode.ExtensionContext) {
+    private timmer: any = 0;
+
+    public static statusBar: StatusBar;
+
+    public static getInstnce(context?: vscode.ExtensionContext) {
+        if (context && !this.statusBar) {
+            this.statusBar = new StatusBar(context);
+        }
+        return this.statusBar || null;
+    }
+
+    private constructor(context: vscode.ExtensionContext) {
         const statedOptions = context.globalState.get('options') as Options;
         const options = Object.assign(defaultOptions, statedOptions || {});
         console.log(options);
@@ -60,6 +71,7 @@ export class StatusBar {
     public setOptions(options: Options) {
         this.options = options;
         this.initData();
+        this.start();
     }
 
     private registerCommand() {
@@ -124,9 +136,10 @@ export class StatusBar {
      * 开始显示数据
      */
     private start() {
-        setInterval(() => {
+        this.timmer && clearInterval(this.timmer);
+        this.timmer = setInterval(() => {
             this.updateText();
-        }, this.options.updateInterval);
+        }, Math.max(16.7, this.options.updateInterval));
     }
 
 }

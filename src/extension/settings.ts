@@ -1,12 +1,15 @@
 import * as vscode from 'vscode';
 import Render from './settings_page/settings_render';
-import options from './default_config';
+import { StatusBar } from './status_bar';
+
+const optionsName = 'options';
 
 export class Settings {
 
     constructor(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.commands.registerCommand('extension.openSettings', () => {
             SettingsPanel.createOrShow(context);
+
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('extension.doRefactor', () => {
@@ -37,11 +40,17 @@ class SettingsPanel {
     private readonly extensionPath: string;
     private disposables: vscode.Disposable[] = [];
 
+    /**
+     * 创建并且打开webview
+     * @param context
+     */
     public static createOrShow(context: vscode.ExtensionContext) {
         const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
 
         if (this.currentPanel) {
             this.currentPanel.panel.reveal();
+            this.currentPanel.notifyPanelData();
+            return;
         }
 
         const panel = vscode.window.createWebviewPanel(this.viewType, 'settings', column || vscode.ViewColumn.One, {
@@ -52,6 +61,7 @@ class SettingsPanel {
         });
 
         this.currentPanel = new SettingsPanel(panel, context);
+        this.currentPanel.notifyPanelData();
     }
 
     public static revive(panel: vscode.WebviewPanel, extensionPath: string) {
@@ -71,15 +81,27 @@ class SettingsPanel {
             //TODO 事件监听分离
             switch (message.type) {
                 case 'changeOptions':
-                    this.context.globalState.update('options', message.data);
-                    console.log(this.context.globalState.get('options'));
+                    const newOptions = message.data;
+                    this.context.globalState.update(optionsName, newOptions);
+                    StatusBar.getInstnce().setOptions(newOptions);
+                    console.log(this.context.globalState.get(optionsName));
                     return;
             }
         }, null, this.disposables);
     }
 
     public doRefactor() {
-        // this.panel.webview.postMessage({ command: 'refactor' });
+        this.panel.webview.postMessage({ command: 'refactor' });
+    }
+
+    /**
+     * 通知webview 修改设置数据
+     */
+    private notifyPanelData() {
+        this.panel.webview.postMessage({
+            type: 'options',
+            data: this.context.globalState.get(optionsName)
+        });
     }
 
     public dispose() {
