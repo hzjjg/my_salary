@@ -9,6 +9,11 @@ TODO: 这里将放效果图片
 
 **仅供娱乐**
 
+## Usage
+
+显示金额：f1 -> MySalary:Show My Salary  
+设置: f1 -> MySalary:Open Settings
+
 ### TODO LIST: 
 
 * 可个性化配置  
