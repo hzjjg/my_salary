@@ -8,7 +8,7 @@ export default (extensionPath: string) => {
         
     <div class="config-item">
         <h3 class="config-title">日工资</h3>
-        <p class="config-desc">就是日工资啊</p>
+        <p class="config-desc">就是日工资啊 (例如：月工资/每月计薪日，正常每月计薪日为21.75)</p>
         <div class="config-input">
             <input type="text" id="dailySalary" />
         </div>
