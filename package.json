@@ -13,7 +13,8 @@
 	"activationEvents": [
 		"onCommand:extension.showMySalary",
 		"onCommand:extension.openSettings",
-		"onCommand:extension.doRefactor"
+		"onCommand:extension.doRefactor",
+		"*"
 	],
 	"main": "./dist/main.js",
 	"repository": "https://github.com/hzjjg/my_salary",
