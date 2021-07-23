@@ -27,6 +27,14 @@
 			{
 				"command": "extension.hideMySalary",
 				"title": "MySalary: Hide My Salary"
+			},
+			{
+				"command": "extension.showTips",
+				"title": "MySalary: Show Tips"
+			},
+			{
+				"command": "extension.hideTips",
+				"title": "MySalary: Hide Tips"
 			}
 		],
 		"configuration": {
@@ -63,6 +71,23 @@
 					"type": "number",
 					"default": 4,
 					"description": "金额保留小数"
+				},
+				"mySalary.tips.showTips": {
+					"type": "boolean",
+					"default": true,
+					"description": "显示工作时间小提示"
+				},
+				"mySalary.tips.tips": {
+					"type": "object",
+					"default": {
+						"notYetStart": "还没到上班时间，休息一下。",
+						"justStart": "上班！赚钱开始！",
+						"normal": "你认真工作的样子的很靓仔。",
+						"teaTime": "喂！三点几嚟，做做撚啊做！饮茶先啦！",
+						"soonGetOff": "收拾东西，准备下班！",
+						"overTime": "都几点了？快回家吧。"
+					},
+					"description": "工作时间小提示"
 				}
 			}
 		}
