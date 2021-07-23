@@ -60,12 +60,12 @@
 				"mySalary.prefix": {
 					"type": "string",
 					"default": "",
-					"description": "日工资数值前的前缀"
+					"description": "日工资数值的前缀"
 				},
 				"mySalary.unit": {
 					"type": "string",
 					"default": "元",
-					"description": "显示在日工资值后的字符，例如”元“，”包狗粮“"
+					"description": "日工资的单位，会显示在工资数值之后。例如”元“，”包狗粮“"
 				},
 				"mySalary.updateInterval": {
 					"type": "number",
@@ -87,7 +87,7 @@
 					"default": {
 						"notYetStart": "还没到上班时间，休息一下。",
 						"justStart": "上班！赚钱开始！",
-						"normal": "你认真工作的样子的很靓仔。",
+						"normal": "你认真工作的样子真的很靓仔。",
 						"teaTime": "喂！三点几嚟，做做撚啊做！饮茶先啦！",
 						"soonGetOff": "收拾东西，准备下班！",
 						"overTime": "都几点了？快回家吧。"
