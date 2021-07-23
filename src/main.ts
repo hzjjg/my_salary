@@ -1,15 +1,13 @@
 import * as vscode from 'vscode';
-import { SettingsPanel, registerSettings } from "./extension/settings/index";
-import { StatusBar } from './extension/status_bar';
+import { Salary } from './extension/salary';
 
 export function activate(context: vscode.ExtensionContext) {
 
 	console.log('activate');
-	console.log(StatusBar);
+	console.log(Salary);
 	
 
-	StatusBar.getInstnce(context);
-	registerSettings(context);
+	Salary.getInstnce(context);
 }
 
 export function deactivate() { }

@@ -3,7 +3,7 @@
 	"displayName": "MySalary",
 	"publisher": "hzjjg",
 	"description": "show your salary",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -12,8 +12,7 @@
 	],
 	"activationEvents": [
 		"onCommand:extension.showMySalary",
-		"onCommand:extension.openSettings",
-		"onCommand:extension.doRefactor",
+		"onCommand:extension.hideMySalary",
 		"*"
 	],
 	"main": "./dist/main.js",
@@ -26,14 +25,47 @@
 				"title": "MySalary: Show My Salary"
 			},
 			{
-				"command": "extension.openSettings",
-				"title": "MySalary: Open Settings"
-			},
-			{
-				"command": "extension.doRefactor",
-				"title": "MySalary: Do Refactor"
+				"command": "extension.hideMySalary",
+				"title": "MySalary: Hide My Salary"
 			}
-		]
+		],
+		"configuration": {
+			"title": "MySalary",
+			"properties": {
+				"mySalary.dailyWages": {
+					"type": "number",
+					"default": "0",
+					"description": "日工资，一般为月工资/每月计薪日（双休工作制时正常每月计薪日为21.75）"
+				},
+				"mySalary.workingHours.from": {
+					"type": "string",
+					"default": "9:00",
+					"format": "time",
+					"description": "上班时间"
+				},
+				"mySalary.workingHours.to": {
+					"type": "string",
+					"default": "18:00",
+					"format": "time",
+					"description": "下班时间"
+				},
+				"mySalary.unit": {
+					"type": "string",
+					"default": "元",
+					"description": "显示在日工资值后的字符，例如”元“，”包狗粮“"
+				},
+				"mySalary.updateInterval": {
+					"type": "number",
+					"default": 100,
+					"description": "金额更新的时间，单位ms"
+				},
+				"mySalary.decimal": {
+					"type": "number",
+					"default": 4,
+					"description": "金额保留小数"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -43,11 +75,11 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"@types/mocha": "^2.2.42",
-		"@types/node": "^10.12.21",
-		"tslint": "^5.12.1",
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28"
+		"@types/mocha": "^9.0.0",
+		"@types/node": "^16.4.1",
+		"tslint": "^6.1.3",
+		"typescript": "^4.3.5",
+		"vscode": "^1.1.37"
 	},
 	"dependencies": {}
 }
