@@ -3,7 +3,7 @@
 	"displayName": "MySalary",
 	"publisher": "hzjjg",
 	"description": "show your salary",
-	"version": "0.0.8",
+	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
