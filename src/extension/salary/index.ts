@@ -109,7 +109,7 @@ export class Salary {
             return '请先设置日工资'
         }
 
-        return `${salary}${this.config.get('unit')}`;
+        return `${this.config.get('prefix')}${salary}${this.config.get('unit')}`;
     }
 
     /**

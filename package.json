@@ -57,6 +57,11 @@
 					"format": "time",
 					"description": "下班时间"
 				},
+				"mySalary.prefix": {
+					"type": "string",
+					"default": "",
+					"description": "日工资数值前的前缀"
+				},
 				"mySalary.unit": {
 					"type": "string",
 					"default": "元",
