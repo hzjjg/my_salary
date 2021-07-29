@@ -3,6 +3,13 @@
 	"displayName": "MySalary",
 	"publisher": "hzjjg",
 	"description": "show your salary",
+	"keywords": [
+		"salary",
+		"工资",
+		"内卷",
+		"funny",
+		"有趣"
+	],
 	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.32.0"
@@ -11,8 +18,6 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.showMySalary",
-		"onCommand:extension.hideMySalary",
 		"*"
 	],
 	"main": "./dist/main.js",

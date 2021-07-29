@@ -69,13 +69,11 @@ export class Salary {
         this.context.subscriptions.push(
             vscode.commands.registerCommand('extension.showMySalary', () => {
                 this.start()
-                vscode.window.showInformationMessage('已显示你的工资!');
             }),
 
             vscode.commands.registerCommand('extension.hideMySalary', () => {
                 this.stop()
                 this.statusBar.hide()
-                vscode.window.showInformationMessage('已隐藏你的工资!');
             }),
             
             vscode.commands.registerCommand('extension.openSettings', () => {

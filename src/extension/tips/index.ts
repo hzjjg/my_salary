@@ -76,8 +76,8 @@ export class Tips {
 
     private registerCommands() {
         this.context.subscriptions.push(
-            vscode.commands.registerCommand('extension.showTips', this.statusBar.show.bind(this)),
-            vscode.commands.registerCommand('extension.hideTips', this.statusBar.hide.bind(this)),
+            vscode.commands.registerCommand('extension.showTips', () => this.statusBar.show()),
+            vscode.commands.registerCommand('extension.hideTips', () => this.statusBar.hide()),
         )
     }
 
